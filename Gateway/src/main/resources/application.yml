@@ -1,31 +1,32 @@
+server:
+  port: 8080
+
 spring:
- application:
-  name: gateway
- cloud:
-  gateway:
-   routes:
-    - id: UserAuth
-      uri: http://localhost:9890
-      predicates:
-        - Path= /security/**
-      filters:
-       - AuthenticationFilter
-    - id: productmanagement
-      uri: http://localhost:8081
-      predicates:
-        - Path=/api/v1/inventory/**
-      filters:
-        - AuthenticationFilter
-    - id: Supplier
-      uri: http://localhost:9090
-      predicates:
-        - Path= /supplier/**
-      filters:
-        - AuthenticationFilter
-
-
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: UserAuth
+          uri: http://localhost:9890
+          predicates:
+            - Path=/security/**
+          filters:
+            - AuthenticationFilter
+        - id: ProductManagement
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/inventory/**
+          filters:
+            - AuthenticationFilter
+        - id: Supplier
+          uri: http://localhost:9090
+          predicates:
+            - Path=/supplier/**
+          filters:
+            - AuthenticationFilter
 
 eureka:
- client:
-  service-url:
-   defaultZone: http://localhost:8761/eureka
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
