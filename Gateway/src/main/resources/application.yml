@@ -16,6 +16,12 @@ spring:
         - Path=/api/v1/inventory/**
       filters:
         - AuthenticationFilter
+    - id: Supplier
+      uri: http://localhost:9090
+      predicates:
+        - Path= /supplier/**
+      filters:
+        - AuthenticationFilter
 
 
 
