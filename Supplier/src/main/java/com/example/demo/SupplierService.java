@@ -6,6 +6,19 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/*
+ * Field supplierRepo in com.example.demo.SupplierService required a bean of type 'com.example.demo.SupplierRepository' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.demo.SupplierRepository' in your configuration.
+
+ * 
+ */
 
 @Service
 public class SupplierService {
