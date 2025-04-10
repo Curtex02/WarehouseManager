@@ -2,10 +2,18 @@ server:
   port: 8080
 
 spring:
+  main:
+    web-application-type: reactive
   application:
     name: gateway
   cloud:
     gateway:
+      corsConfigurations:
+        '[/**]':
+          allowedOrigins: "http://loalhost:4200"
+          allowMethods: "*"
+          allowHeaders: "*"
+          allowCredentials: true
       routes:
         - id: UserAuth
           uri: http://localhost:9890
