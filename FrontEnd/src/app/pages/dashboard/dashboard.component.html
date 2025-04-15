@@ -1,0 +1,12 @@
+<h2>Dashboard</h2>
+<p>Welcome, {{ role }}</p>
+
+<div *ngIf="role === 'ADMIN'">
+  <p>Admin dashboard view</p>
+</div>
+
+<div *ngIf="role === 'STAFF'">
+  <p>Staff dashboard view</p>
+</div>
+
+<button (click)="logout()">Logout</button>
