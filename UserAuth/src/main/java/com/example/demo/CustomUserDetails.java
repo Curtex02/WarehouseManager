@@ -16,12 +16,12 @@ public class CustomUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 5132779114556937879L;
 	
-	private String userName;
+	private String userEmail;
 	private String password;
 	private Role role;
 	
 	public CustomUserDetails(UserCredential userCredential) {
-		userName = userCredential.getEmail();
+		userEmail = userCredential.getEmail();
 		password = userCredential.getPassword();
 		role = userCredential.getRole();
 	}
@@ -41,7 +41,7 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return userName;
+		return userEmail;
 	}
 
 	@Override

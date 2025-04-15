@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 UserCredential data	=repository.findByEmail(username).orElseThrow(() ->new UsernameNotFoundException("User not Found"));
 	
 		return CustomUserDetails.builder()
-				.userName(data.getEmail())
+				.userEmail(data.getEmail())
 				.password(data.getPassword())
 				.role(data.getRole())
 				.build();

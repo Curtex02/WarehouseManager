@@ -29,11 +29,11 @@ public class AuthController {
 	@PostMapping("/login")
 	public String generateToken(@RequestBody AuthRequest authRequest) {
 		Authentication auth = manager.authenticate(
-				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+				new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
 				);
 
 		if (auth.isAuthenticated()) {
-			return service.generateToken(authRequest.getUsername());
+			return service.generateToken(authRequest.getEmail());
 		} else {
 			throw new RuntimeException("Invalid");
 		}

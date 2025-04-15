@@ -8,12 +8,13 @@ spring:
     name: gateway
   cloud:
     gateway:
-      corsConfigurations:
-        '[/**]':
-          allowedOrigins: "http://loalhost:4200"
-          allowMethods: "*"
-          allowHeaders: "*"
-          allowCredentials: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
       routes:
         - id: UserAuth
           uri: http://localhost:9890
@@ -33,6 +34,12 @@ spring:
             - Path=/supplier/**
           filters:
             - AuthenticationFilter
+        - id: TrackingInventory
+          uri: http://localhost:8082
+          predicates:
+          - Path=/alerts/**
+          filters:
+          - AuthenticationFilter
 
 eureka:
   client:
