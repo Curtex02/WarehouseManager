@@ -1,12 +1,109 @@
 <h2>Dashboard</h2>
-<p>Welcome, {{ role }}</p>
+<p>Welcome, {{ email }}</p>
+<p>Your role: {{ role }}</p>
 
+<!-- Navigation Bar -->
+<nav class="nav-bar">
+  <button (click)="selectTab('inventory')">Inventory</button>
+  <button *ngIf="role === 'ADMIN'" (click)="selectTab('alter')">Alter Products</button>
+  <button *ngIf="role === 'ADMIN'" (click)="selectTab('suppliers')">Suppliers</button>
+  <button *ngIf="role === 'ADMIN'" (click)="selectTab('orders')">Orders</button>
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+<!-- Tab Content -->
+<div [ngSwitch]="selectedTab" class="tab-content">
+
+  <!-- Inventory Tab -->
+  <div *ngSwitchCase="'inventory'">
+    <h3>Inventory</h3>
+    <p *ngIf="role === 'STAFF'">Viewing inventory (read-only)</p>
+    <!-- Inventory content or search by SKU -->
+  </div>
+
+  <!-- Alter Tab (Admin Only) -->
+  <div *ngSwitchCase="'alter'">
+    <h3>Manage Products</h3>
+
+    <!-- Add Product Form -->
 <div *ngIf="role === 'ADMIN'">
-  <p>Admin dashboard view</p>
-</div>
+    <h4>Add New Product</h4>
+    <form (ngSubmit)="addProduct()" #productForm="ngForm" class="product-form">
+      
+      <div class="form-group">
+        <label for="sku">SKU:</label>
+        <input
+          id="sku"
+          type="number"
+          placeholder="Enter SKU"
+          required
+          [(ngModel)]="newProduct.sku"
+          name="sku"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="name">Product Name:</label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Enter product name"
+          required
+          [(ngModel)]="newProduct.name"
+          name="name"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input
+          id="description"
+          type="text"
+          placeholder="Enter description"
+          required
+          [(ngModel)]="newProduct.description"
+          name="description"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="initial_stock">Initial Stock:</label>
+        <input
+          id="initial_stock"
+          type="number"
+          placeholder="Enter initial stock"
+          required
+          [(ngModel)]="newProduct.initial_stock"
+          name="initial_stock"
+        />
+      </div>
+  
+      <button type="submit">Add Product</button>
+    </form>
+  </div>
 
-<div *ngIf="role === 'STAFF'">
-  <p>Staff dashboard view</p>
-</div>
+  <!-- Suppliers Tab (Admin Only) -->
+  <div *ngSwitchCase="'suppliers'">
+    <h3>Suppliers</h3>
+    <p>
+      <button *ngIf="role === 'ADMIN'">Add Supplier</button>
+      <button *ngIf="role === 'ADMIN'">Edit Supplier</button>
+      <button *ngIf="role === 'ADMIN'">Delete Supplier</button>
+    </p>
+  </div>
 
-<button (click)="logout()">Logout</button>
+  <!-- Orders Tab (Admin Only) -->
+  <div *ngSwitchCase="'orders'">
+    <h3>Orders</h3>
+    <p>
+      <button *ngIf="role === 'ADMIN'">Place Order</button>
+      <button *ngIf="role === 'ADMIN'">Edit Order</button>
+      <button *ngIf="role === 'ADMIN'">Delete Order</button>
+    </p>
+  </div>
+
+  <!-- Fallback -->
+  <div *ngSwitchDefault>
+    <p>Select a tab</p>
+  </div>
+</div>
