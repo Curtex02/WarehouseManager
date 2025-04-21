@@ -1,61 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { RegisterRequest } from '../models/RegisterRequest.model';
 import { LoginRequest } from '../models/LoginRequest.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private readonly baseUrl = 'http://localhost:8080/security';
 
-  private readonly TOKEN_KEY = 'jwt_token';
-  private readonly ROLE_KEY = 'user_role';
+export class AuthService {
+  private readonly baseUrl = 'http://localhost:8080';
+  TOKEN_KEY: string = localStorage.getItem('token') ?? '';
+  headers: any = null;
 
   constructor(private readonly http: HttpClient) {}
 
   register(request:RegisterRequest): Observable<any> {
     // for Testing console.log('Sending registration request:', data);
-    return this.http.post(`${this.baseUrl}/register`, request, {
+    return this.http.post(`${this.baseUrl}/security/register`, request, {
       responseType: 'text',
     });
   }
   
   login(request: LoginRequest): Observable<any> {
-    return new Observable(observer => {
-      this.http.post(`${this.baseUrl}/login`, request, { responseType: 'text' })
-        .subscribe({
-          next: (token: string) => {
-            localStorage.setItem(this.TOKEN_KEY, token);
-            localStorage.setItem(this.ROLE_KEY, request.role); // or decode from token later
-            observer.next(token);
-            observer.complete();
-          },
-          error: err => observer.error(err)
-        });
-    });
+    return this.http.post(`${this.baseUrl}/security/login`, request, {
+      responseType: 'text',
+    }).pipe(
+      tap((token: string) => {
+        localStorage.setItem('token', token);             // Save token
+        localStorage.setItem('email', request.email);     // Save user info
+        localStorage.setItem('role', request.role);       
+      })
+    );
+  }
+  
+  getEmail(): string | null {
+    return localStorage.getItem('email');
+  }
+  
+  getRole(): string | null {
+    return localStorage.getItem('role');
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.ROLE_KEY);
+    this.TOKEN_KEY = '';
+    localStorage.clear();
   }
 
   storeToken(token: string): void {
-    localStorage.setItem(this.ROLE_KEY, token);
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.ROLE_KEY);
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
-  }
-
-  getUserRole(): string {
-    return localStorage.getItem(this.ROLE_KEY) ?? '';
+    return !!localStorage.getItem('token');
   }
 
   getAuthHeaders(): HttpHeaders {
@@ -63,6 +64,10 @@ export class AuthService {
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
+  }
+
+  addInventoryStock(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/v1/inventory/products/add`, data);
   }
 
 
