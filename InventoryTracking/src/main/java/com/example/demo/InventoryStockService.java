@@ -16,13 +16,6 @@ public class InventoryStockService {
         List<InventoryStockEntity> entities = inventoryStockRepository.findAll();
         return entities.stream().map(InventoryStockDao::new).collect(Collectors.toList());
     }
-    public InventoryStockDao getInventoryStockById(int id) {
-        InventoryStockEntity entity =  inventoryStockRepository.findById(id).orElse(null);
-        if (entity != null) {
-            return new InventoryStockDao(entity);
-        }
-        return null;
-    }
     public InventoryStockDao getInventoryStockBySku(int sku) {
         InventoryStockEntity entity =  inventoryStockRepository.findBySku(sku).orElse(null);
         if (entity != null) {
@@ -34,29 +27,12 @@ public class InventoryStockService {
         InventoryStockEntity entity = new InventoryStockEntity(inventoryStockDao);
         return new InventoryStockDao(inventoryStockRepository.save(entity));
     }
-    public InventoryStockDao updateInventoryStockById(int id, InventoryStockDao inventoryStockDao) {
-        InventoryStockEntity entity = inventoryStockRepository.findById(id).orElse(null);
-        if (entity != null) {
-            entity.setSku(inventoryStockDao.getSku());
-            entity.setQuantity(inventoryStockDao.getQuantity());
-            return new InventoryStockDao(inventoryStockRepository.save(entity));
-        }
-        return null;
-    }
     public InventoryStockDao updateInventoryStockBySku(int sku, InventoryStockDao inventoryStockDao) {
         InventoryStockEntity entity = inventoryStockRepository.findBySku(sku).orElse(null);
         if (entity != null) {
             entity.setSku(inventoryStockDao.getSku());
             entity.setQuantity(inventoryStockDao.getQuantity());
             return new InventoryStockDao(inventoryStockRepository.save(entity));
-        }
-        return null;
-    }
-    public InventoryStockDao deleteInventoryStockById(int id) {
-        InventoryStockEntity entity = inventoryStockRepository.findById(id).orElse(null);
-        if (entity != null) {
-            inventoryStockRepository.delete(entity);
-            return new InventoryStockDao(entity);
         }
         return null;
     }
@@ -70,14 +46,6 @@ public class InventoryStockService {
     }
     public InventoryStockDao updateInventoryStockQuantityBySku(int sku, int quantity) {
         InventoryStockEntity entity = inventoryStockRepository.findBySku(sku).orElse(null);
-        if (entity != null) {
-            entity.setQuantity(quantity);
-            return new InventoryStockDao(inventoryStockRepository.save(entity));
-        }
-        return null;
-    }
-    public InventoryStockDao updateInventoryStockQuantityById(int id, int quantity) {
-        InventoryStockEntity entity = inventoryStockRepository.findById(id).orElse(null);
         if (entity != null) {
             entity.setQuantity(quantity);
             return new InventoryStockDao(inventoryStockRepository.save(entity));

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
-public class ProductController {//localhost:8081/api/v1/inventory
+public class ProductController {//localhost:8080/api/v1/inventory
 	@Autowired
 	private ProductService productService;
 	
@@ -23,19 +23,19 @@ public class ProductController {//localhost:8081/api/v1/inventory
 		return productService.addProduct(productDao);
 	}
 	
-	@PutMapping("/products/update/{id}")
-	public ProductDao updateProduct(@PathVariable int id, @RequestBody ProductDao productDao) {
-		return productService.updateProduct(id, productDao);
+	@PutMapping("/products/update/{sku}")
+	public ProductDao updateProduct(@PathVariable int sku, @RequestBody ProductDao productDao) {
+		return productService.updateProduct(sku, productDao);
 	}
 	
-	@DeleteMapping("/products/{id}")
-	public ProductDao deleteProduct(@PathVariable int id) {
-		return productService.deleteProduct(id);
+	@DeleteMapping("/products/{sku}")
+	public ProductDao deleteProduct(@PathVariable int sku) {
+		return productService.deleteProduct(sku);
 	}	
 	
-	@GetMapping("/products/{id}")
-	public ProductDao getProductDetails(@PathVariable int id){
-		return productService.getProductDetails(id);
+	@GetMapping("/products/{sku}")
+	public ProductDao getProductDetails(@PathVariable int sku){
+		return productService.getProductDetails(sku);
 	}
 	
 	@GetMapping("/alerts")
