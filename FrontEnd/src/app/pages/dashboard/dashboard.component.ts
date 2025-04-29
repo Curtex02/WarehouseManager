@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NewProduct } from '../../models/NewProduct.model';
 import { InventoryService } from '../../services/inventory.service';
+import { SupplierService, Supplier } from '../../services/supplier.service';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -18,11 +20,14 @@ export class DashboardComponent implements OnInit {
   selectedTab: string = 'inventory';
   newProduct: NewProduct = new NewProduct();
   inventoryItems: any[] = [];
+  suppliers: Supplier[] = [];
+  newSupplier: Supplier = { id: 0, name: '', contactInfo: '', rating: '' };
 
   constructor(
     readonly authService: AuthService,
     private readonly router: Router,
     private readonly inventoryService: InventoryService,
+    private readonly supplierService: SupplierService,
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +45,9 @@ export class DashboardComponent implements OnInit {
     if (tab === 'inventory') {
       this.loadInventory(); // Refresh inventory when switching to inventory tab
     }
+    if (tab === 'suppliers') {
+      this.loadSuppliers();
+    }
   }
 
   logout(): void {
@@ -56,6 +64,24 @@ export class DashboardComponent implements OnInit {
         console.error('Failed to load inventory', err);
       }
     });
+  }
+
+  loadSuppliers() {
+    this.supplierService.getAllSuppliers().subscribe(data => {
+      this.suppliers = data;
+    });
+  }
+
+  addSupplier() {
+    this.supplierService.insertSupplier(this.newSupplier).subscribe(() => this.loadSuppliers());
+  }
+
+  updateSupplier() {
+    this.supplierService.updateSupplier(this.newSupplier.id, this.newSupplier).subscribe(() => this.loadSuppliers());
+  }
+
+  deleteSupplier() {
+    this.supplierService.deleteSupplier(this.newSupplier.id).subscribe(() => this.loadSuppliers());
   }
 
   addProduct(): void {

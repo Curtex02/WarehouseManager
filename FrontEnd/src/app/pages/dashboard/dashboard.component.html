@@ -101,13 +101,42 @@
   <!-- Suppliers Tab (Admin Only) -->
   <div *ngSwitchCase="'suppliers'">
     <h3>Suppliers</h3>
-    <p>
-      <button *ngIf="role === 'ADMIN'">Add Supplier</button>
-      <button *ngIf="role === 'ADMIN'">Edit Supplier</button>
-      <button *ngIf="role === 'ADMIN'">Delete Supplier</button>
-    </p>
-  </div>
 
+<!-- Supplier Form -->
+<form class="supplier-form">
+  <label for="id">ID:</label>
+  <input type="number" [(ngModel)]="newSupplier.id" name="id" />
+
+  <label for="name">Name:</label>
+  <input type="text" [(ngModel)]="newSupplier.name" name="name" />
+
+  <label for="contact">Contact Info:</label>
+  <input type="text" [(ngModel)]="newSupplier.contactInfo" name="contact" />
+
+  <label for="rating">Rating:</label>
+  <input type="text" [(ngModel)]="newSupplier.rating" name="rating" />
+
+  <button type="button" (click)="addSupplier()">Add</button>
+  <button type="button" (click)="updateSupplier()">Update</button>
+  <button type="button" (click)="deleteSupplier()">Delete</button>
+</form>
+
+<!-- Supplier Table -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Contact</th><th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let supplier of suppliers">
+      <td>{{ supplier.id }}</td>
+      <td>{{ supplier.name }}</td>
+      <td>{{ supplier.contactInfo }}</td>
+      <td>{{ supplier.rating }}</td>
+    </tr>
+  </tbody>
+</table>
   <!-- Orders Tab (Admin Only) -->
   <div *ngSwitchCase="'orders'">
     <h3>Orders</h3>
