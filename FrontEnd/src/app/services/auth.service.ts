@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { RegisterRequest } from '../models/RegisterRequest.model';
 import { LoginRequest } from '../models/LoginRequest.model';
+import { NewProduct } from '../models/NewProduct.model';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,18 @@ export class AuthService {
 
   addInventoryStock(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/v1/inventory/products/add`, data);
+  }
+
+  updateProduct(sku: number, product: NewProduct): Observable<any> {
+    return this.http.put(`${this.baseUrl}/api/v1/inventory/products/update/${sku}`, product);
+  }
+
+  deleteProduct(sku: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/api/v1/inventory/products/${sku}`);
+  }
+
+  getProductDetails(sku: number): Observable<NewProduct> {
+    return this.http.get<NewProduct>(`${this.baseUrl}/api/v1/inventory/products/${sku}`);
   }
 
 

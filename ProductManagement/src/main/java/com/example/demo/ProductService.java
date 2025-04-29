@@ -50,8 +50,8 @@ public class ProductService {
 	}
 	
 	//b.Update Product Details
-	public ProductDao updateProduct(int id, ProductDao productDao) {
-		ProductEntity productEntity = productRepository.findById(id).orElse(null);
+	public ProductDao updateProduct(int sku, ProductDao productDao) {
+		ProductEntity productEntity = productRepository.findBySku(sku).orElse(null);
 		if(productEntity != null) {
 			productEntity.setName(productDao.getName());
 			productEntity.setDescription(productDao.getDescription());
@@ -63,8 +63,8 @@ public class ProductService {
 	}
 	
 	//c.Delete Product
-	public ProductDao deleteProduct(int id) {
-		ProductEntity productEntity = productRepository.findById(id).orElse(null);
+	public ProductDao deleteProduct(int sku) {
+		ProductEntity productEntity = productRepository.findBySku(sku).orElse(null);
 		if (productEntity != null) {
 			productRepository.delete(productEntity);
 			//product client deleting product from inventory by sku
@@ -74,8 +74,8 @@ public class ProductService {
 	}
 	
 	//d. View Product Details
-	public ProductDao getProductDetails(int id) {
-		ProductEntity productEntity = productRepository.findById(id).orElse(null);
+	public ProductDao getProductDetails(int sku) {
+		ProductEntity productEntity = productRepository.findBySku(sku).orElse(null);
 		return mapEntityToDao(productEntity);
 	}	
 	
