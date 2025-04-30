@@ -102,50 +102,114 @@
   <div *ngSwitchCase="'suppliers'">
     <h3>Suppliers</h3>
 
-<!-- Supplier Form -->
-<form class="supplier-form">
-  <label for="id">ID:</label>
-  <input type="number" [(ngModel)]="newSupplier.id" name="id" />
+      <!-- Supplier Form -->
+      <form class="supplier-form">
+        <label for="id">ID:</label>
+        <input type="number" [(ngModel)]="newSupplier.id" name="id" />
 
-  <label for="name">Name:</label>
-  <input type="text" [(ngModel)]="newSupplier.name" name="name" />
+        <label for="name">Name:</label>
+        <input type="text" [(ngModel)]="newSupplier.name" name="name" />
 
-  <label for="contact">Contact Info:</label>
-  <input type="text" [(ngModel)]="newSupplier.contactInfo" name="contact" />
+        <label for="contact">Contact Info:</label>
+        <input type="text" [(ngModel)]="newSupplier.contactInfo" name="contact" />
 
-  <label for="rating">Rating:</label>
-  <input type="text" [(ngModel)]="newSupplier.rating" name="rating" />
+        <label for="rating">Rating:</label>
+        <input type="text" [(ngModel)]="newSupplier.rating" name="rating" />
 
-  <button type="button" (click)="addSupplier()">Add</button>
-  <button type="button" (click)="updateSupplier()">Update</button>
-  <button type="button" (click)="deleteSupplier()">Delete</button>
-</form>
+        <button type="button" (click)="addSupplier()">Add</button>
+        <button type="button" (click)="updateSupplier()">Update</button>
+        <button type="button" (click)="deleteSupplier()">Delete</button>
+      </form>
 
-<!-- Supplier Table -->
-<table>
-  <thead>
-    <tr>
-      <th>ID</th><th>Name</th><th>Contact</th><th>Rating</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let supplier of suppliers">
-      <td>{{ supplier.id }}</td>
-      <td>{{ supplier.name }}</td>
-      <td>{{ supplier.contactInfo }}</td>
-      <td>{{ supplier.rating }}</td>
-    </tr>
-  </tbody>
-</table>
-  <!-- Orders Tab (Admin Only) -->
-  <div *ngSwitchCase="'orders'">
-    <h3>Orders</h3>
-    <p>
-      <button *ngIf="role === 'ADMIN'">Place Order</button>
-      <button *ngIf="role === 'ADMIN'">Edit Order</button>
-      <button *ngIf="role === 'ADMIN'">Delete Order</button>
-    </p>
+      <!-- Supplier Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Contact</th><th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let supplier of suppliers">
+            <td>{{ supplier.id }}</td>
+            <td>{{ supplier.name }}</td>
+            <td>{{ supplier.contactInfo }}</td>
+            <td>{{ supplier.rating }}</td>
+          </tr>
+        </tbody>
+      </table>
   </div>
+  <!-- Orders Tab (Admin Only) -->
+<div *ngSwitchCase="'orders'">
+  <h3 style="display: inline-block; margin-right: 1rem;">Orders</h3>
+  <button (click)="showOrderForm = !showOrderForm">
+    {{ showOrderForm ? 'Close Form' : 'Place Order' }}
+  </button>
+
+  <!-- Order Form -->
+  <div *ngIf="showOrderForm" style="margin-top: 1rem;">
+    <form (ngSubmit)="placeOrder()">
+      <label>
+        Supplier ID:
+        <input type="number" [(ngModel)]="newOrder.supplier_id" name="supplier_id" required />
+      </label>
+
+      <div *ngFor="let entry of productEntries; let i = index" style="margin-top: 0.5rem;">
+        <label>
+          SKU:
+          <input type="number" [(ngModel)]="entry.sku" name="sku{{i}}" required />
+        </label>
+        <label>
+          Quantity:
+          <input type="number" [(ngModel)]="entry.quantity" name="qty{{i}}" required />
+        </label>
+        <button type="button" (click)="removeProductEntry(i)">Remove</button>
+      </div>
+
+      <button type="button" (click)="addProductEntry()">Add Product</button>
+      <br /><br />
+      <button type="submit">Submit Order</button>
+    </form>
+  </div>
+
+  <!-- Search by Order ID -->
+  <div style="margin-top: 2rem;">
+    <label>
+      Search Order by ID:
+      <input [(ngModel)]="searchOrderId" name="searchOrderId" />
+    </label>
+    <button (click)="searchOrder()">Search</button>
+  </div>
+
+  <!-- Orders Table -->
+  <table style="margin-top: 1rem;" *ngIf="filteredOrders.length">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Supplier Name</th>
+        <th>Total Price</th>
+        <th>Products</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of filteredOrders">
+        <td>{{ order.orderId }}</td>
+        <td>{{ order.supplier.name }}</td>
+        <td>\${{ order.totalPrice.toFixed(2) }}</td>
+        <td>
+          <div *ngFor="let product of order.productList">
+            {{ product.sku }} - {{ product.name }}
+          </div>
+        </td>
+        <td>
+          <button (click)="deleteOrder(order.orderId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!filteredOrders.length">No orders found.</p>
+</div>
 
   <!-- Fallback -->
   <div *ngSwitchDefault>

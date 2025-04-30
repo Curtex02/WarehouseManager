@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NewProduct } from '../../models/NewProduct.model';
 import { InventoryService } from '../../services/inventory.service';
 import { SupplierService, Supplier } from '../../services/supplier.service';
+import { OrderService, Order } from '../../services/order.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,12 +23,24 @@ export class DashboardComponent implements OnInit {
   inventoryItems: any[] = [];
   suppliers: Supplier[] = [];
   newSupplier: Supplier = { id: 0, name: '', contactInfo: '', rating: '' };
+  showOrderForm = false;
+  searchOrderId: string = '';
+  newOrder = {
+    supplier_id: 0,
+    productSkusAndQuantities: {} as { [sku: number]: number }
+  };
+  productEntries = [{ sku: 0, quantity: 0 }];
+  orders: Order[] = [];
+  filteredOrders: Order[] = [];
+  objectKeys = Object.keys as (obj: object) => string[];
+  
 
   constructor(
     readonly authService: AuthService,
     private readonly router: Router,
     private readonly inventoryService: InventoryService,
     private readonly supplierService: SupplierService,
+    private readonly orderService: OrderService,
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +60,9 @@ export class DashboardComponent implements OnInit {
     }
     if (tab === 'suppliers') {
       this.loadSuppliers();
+    }
+    if (tab === 'orders') {
+      this.loadOrders();
     }
   }
 
@@ -151,6 +167,52 @@ export class DashboardComponent implements OnInit {
         alert('Failed to fetch product.');
       }
     });
+  }
+
+  addProductEntry() {
+    this.productEntries.push({ sku: 0, quantity: 0 });
+  }
+  
+  removeProductEntry(index: number) {
+    this.productEntries.splice(index, 1);
+  }
+  
+  placeOrder() {
+    this.newOrder.productSkusAndQuantities = {};
+    for (const entry of this.productEntries) {
+      if (entry.sku && entry.quantity) {
+        this.newOrder.productSkusAndQuantities[entry.sku] = entry.quantity;
+      }
+    }
+  
+    this.orderService.placeOrder(this.newOrder).subscribe(() => {
+      this.loadOrders();
+      this.productEntries = [{ sku: 0, quantity: 0 }];
+      this.newOrder = { supplier_id: 0, productSkusAndQuantities: {} };
+      this.showOrderForm = false;
+    });
+  }
+  
+  searchOrder() {
+    const id = this.searchOrderId.trim();
+    if (id) {
+      this.orderService.getOrderById(id).subscribe(order => {
+        this.filteredOrders = order ? [order] : [];
+      });
+    } else {
+      this.filteredOrders = this.orders;
+    }
+  }
+  
+  loadOrders() {
+    this.orderService.getAllOrders().subscribe(data => {
+      this.orders = data;
+      this.filteredOrders = data;
+    });
+  }
+  
+  deleteOrder(orderId: string) {
+    this.orderService.deleteOrder(orderId).subscribe(() => this.loadOrders());
   }
 
 }
