@@ -40,6 +40,12 @@ spring:
           - Path=/stockapi/**
           filters:
           - AuthenticationFilter
+        - id: OrderManagement
+          uri: http://localhost:9000
+          predicates:
+          - Path=/orders/**
+          filters:
+          - AuthenticationFilter
 
 eureka:
   client:

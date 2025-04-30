@@ -9,6 +9,10 @@ export interface Supplier {
   rating: string;
 }
 
+interface ProductMap {
+  [key: string]: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
