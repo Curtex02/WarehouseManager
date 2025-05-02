@@ -1,22 +1,29 @@
-<h2>Login</h2>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email" />
-  </div>
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="card p-4 shadow-lg w-100" style="max-width: 400px;">
+    <h2 class="text-center mb-4 text-primary">Login to Your Account</h2>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter your email" />
+      </div>
 
-  <div>
-    <label for="password">Password:</label>
-    <input id="password" type="password" formControlName="password" />
-  </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input id="password" type="password" formControlName="password" class="form-control" placeholder="Enter your password" />
+      </div>
 
-  <div>
-    <label for="role">Role:</label>
-    <select id="role" formControlName="role">
-      <option value="STAFF">Staff</option>
-      <option value="ADMIN">Admin</option>
-    </select>
-  </div>
+      <div class="mb-4">
+        <label for="role" class="form-label">Role:</label>
+        <select id="role" formControlName="role" class="form-select">
+          <option value="STAFF">Staff</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
 
-  <button type="submit">Login</button>
-</form>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</div>

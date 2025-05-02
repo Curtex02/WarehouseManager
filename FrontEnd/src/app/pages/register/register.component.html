@@ -1,23 +1,33 @@
-<h2>Register</h2>
-<form (ngSubmit)="register()" #registerForm="ngForm">
-  <label for="email">Email:</label>
-  <input type="email" id="email" [(ngModel)]="email" name="email" required />
-  <br />
+<div class="container mt-5">
+  <div class="card shadow-lg p-4 bg-dark text-light border-light">
+    <h2 class="text-center mb-4">Register</h2>
+    <form (ngSubmit)="register()" #registerForm="ngForm">
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" class="form-control" [(ngModel)]="email" name="email" required />
+      </div>
 
-  <label for="name">Name:</label>
-  <input type="text" id="name" [(ngModel)]="name" name="name" required />
-  <br />
+      <div class="form-group mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" class="form-control" [(ngModel)]="name" name="name" required />
+      </div>
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" [(ngModel)]="password" name="password" required />
-  <br />
+      <div class="form-group mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password" required />
+      </div>
 
-  <label for="role">Role:</label>
-  <select id="role" [(ngModel)]="role" name="role" required>
-    <option value="STAFF">Staff</option>
-    <option value="ADMIN">Admin</option>
-  </select>
-  <br /><br />
+      <div class="form-group mb-4">
+        <label for="role" class="form-label">Role:</label>
+        <select id="role" class="form-select" [(ngModel)]="role" name="role" required>
+          <option value="STAFF">Staff</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
 
-  <button type="submit">Register</button>
-</form>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-warning btn-block">Register</button>
+      </div>
+    </form>
+  </div>
+</div>

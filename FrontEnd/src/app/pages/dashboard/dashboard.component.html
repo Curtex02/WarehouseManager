@@ -15,118 +15,78 @@
 <div [ngSwitch]="selectedTab" class="tab-content">
 
   <!-- Inventory Tab -->
-<div *ngSwitchCase="'inventory'">
-  <h3>Inventory</h3>
-  <p *ngIf="role === 'STAFF'">Viewing inventory (read-only)</p>
+  <div *ngSwitchCase="'inventory'">
+    <h3>Inventory</h3>
+    <p *ngIf="role === 'STAFF'">Viewing inventory (read-only)</p>
 
-  <!-- Inventory Table -->
-  <table>
-    <thead>
-      <tr>
-        <th>SKU</th>
-        <th>Quantity</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of inventoryItems">
-        <td>{{ item.sku }}</td>
-        <td>{{ item.quantity }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of inventoryItems">
+          <td>{{ item.sku }}</td>
+          <td>{{ item.quantity }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
+  <!-- Alter Tab -->
+  <div *ngSwitchCase="'alter'">
+    <ng-container *ngIf="role === 'ADMIN'">
+      <h3>Manage Products</h3>
+      <form #productForm="ngForm" class="product-form">
+        <div class="form-group">
+          <label for="sku">SKU:</label>
+          <input id="sku" type="number" required [(ngModel)]="newProduct.sku" name="sku" />
+        </div>
+        <div class="form-group">
+          <label for="name">Product Name:</label>
+          <input id="name" type="text" [(ngModel)]="newProduct.name" name="name" />
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <input id="description" type="text" [(ngModel)]="newProduct.description" name="description" />
+        </div>
+        <div class="form-group">
+          <label for="initial_stock">Initial Stock:</label>
+          <input id="initial_stock" type="number" [(ngModel)]="newProduct.initial_stock" name="initial_stock" />
+        </div>
 
-<!-- Alter Tab (Admin Only) -->
-<div *ngSwitchCase="'alter'">
-  <h3>Manage Products</h3>
+        <div class="form-actions">
+          <button type="button" (click)="addProduct()">Add</button>
+          <button type="button" (click)="updateProduct()">Update</button>
+          <button type="button" (click)="deleteProduct()">Delete</button>
+          <button type="button" (click)="getProductDetails()">Get Details</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
 
-  <!-- Product Form -->
-  <form #productForm="ngForm" class="product-form">
-    <div class="form-group">
-      <label for="sku">SKU:</label>
-      <input
-        id="sku"
-        type="number"
-        placeholder="Enter SKU"
-        required
-        [(ngModel)]="newProduct.sku"
-        name="sku"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="name">Product Name:</label>
-      <input
-        id="name"
-        type="text"
-        placeholder="Enter product name"
-        [(ngModel)]="newProduct.name"
-        name="name"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="description">Description:</label>
-      <input
-        id="description"
-        type="text"
-        placeholder="Enter description"
-        [(ngModel)]="newProduct.description"
-        name="description"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="initial_stock">Initial Stock:</label>
-      <input
-        id="initial_stock"
-        type="number"
-        placeholder="Enter initial stock"
-        [(ngModel)]="newProduct.initial_stock"
-        name="initial_stock"
-      />
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="form-actions">
-      <button type="button" (click)="addProduct()">Add Product</button>
-      <button type="button" (click)="updateProduct()">Update Product</button>
-      <button type="button" (click)="deleteProduct()">Delete Product</button>
-      <button type="button" (click)="getProductDetails()">Get Product Details</button>
-    </div>
-  </form>
-</div>
-
-  <!-- Suppliers Tab (Admin Only) -->
+  <!-- Suppliers Tab -->
   <div *ngSwitchCase="'suppliers'">
-    <h3>Suppliers</h3>
-
-      <!-- Supplier Form -->
+    <ng-container *ngIf="role === 'ADMIN'">
+      <h3>Suppliers</h3>
       <form class="supplier-form">
-        <label for="id">ID:</label>
-        <input type="number" [(ngModel)]="newSupplier.id" name="id" />
+        <label>ID: <input type="number" [(ngModel)]="newSupplier.id" name="id" /></label>
+        <label>Name: <input type="text" [(ngModel)]="newSupplier.name" name="name" /></label>
+        <label>Contact Info: <input type="text" [(ngModel)]="newSupplier.contactInfo" name="contact" /></label>
+        <label>Rating: <input type="text" [(ngModel)]="newSupplier.rating" name="rating" /></label>
 
-        <label for="name">Name:</label>
-        <input type="text" [(ngModel)]="newSupplier.name" name="name" />
-
-        <label for="contact">Contact Info:</label>
-        <input type="text" [(ngModel)]="newSupplier.contactInfo" name="contact" />
-
-        <label for="rating">Rating:</label>
-        <input type="text" [(ngModel)]="newSupplier.rating" name="rating" />
-
-        <button type="button" (click)="addSupplier()">Add</button>
-        <button type="button" (click)="updateSupplier()">Update</button>
-        <button type="button" (click)="deleteSupplier()">Delete</button>
+        <div class="form-actions">
+          <button type="button" (click)="addSupplier()">Add</button>
+          <button type="button" (click)="updateSupplier()">Update</button>
+          <button type="button" (click)="deleteSupplier()">Delete</button>
+        </div>
       </form>
 
-      <!-- Supplier Table -->
       <table>
         <thead>
-          <tr>
-            <th>ID</th><th>Name</th><th>Contact</th><th>Rating</th>
-          </tr>
+          <tr><th>ID</th><th>Name</th><th>Contact</th><th>Rating</th></tr>
         </thead>
         <tbody>
           <tr *ngFor="let supplier of suppliers">
@@ -137,82 +97,70 @@
           </tr>
         </tbody>
       </table>
+    </ng-container>
   </div>
-  <!-- Orders Tab (Admin Only) -->
-<div *ngSwitchCase="'orders'">
-  <h3 style="display: inline-block; margin-right: 1rem;">Orders</h3>
-  <button (click)="showOrderForm = !showOrderForm">
-    {{ showOrderForm ? 'Close Form' : 'Place Order' }}
-  </button>
 
-  <!-- Order Form -->
-  <div *ngIf="showOrderForm" style="margin-top: 1rem;">
-    <form (ngSubmit)="placeOrder()">
-      <label>
-        Supplier ID:
-        <input type="number" [(ngModel)]="newOrder.supplier_id" name="supplier_id" required />
-      </label>
+  <!-- Orders Tab -->
+  <div *ngSwitchCase="'orders'">
+    <ng-container *ngIf="role === 'ADMIN'">
+      <h3 style="display: inline-block; margin-right: 1rem;">Orders</h3>
+      <button (click)="showOrderForm = !showOrderForm">{{ showOrderForm ? 'Close Form' : 'Place Order' }}</button>
 
-      <div *ngFor="let entry of productEntries; let i = index" style="margin-top: 0.5rem;">
-        <label>
-          SKU:
-          <input type="number" [(ngModel)]="entry.sku" name="sku{{i}}" required />
-        </label>
-        <label>
-          Quantity:
-          <input type="number" [(ngModel)]="entry.quantity" name="qty{{i}}" required />
-        </label>
-        <button type="button" (click)="removeProductEntry(i)">Remove</button>
+      <div *ngIf="showOrderForm" style="margin-top: 1rem;">
+        <form (ngSubmit)="placeOrder()">
+          <label>
+            Supplier ID:
+            <input type="number" [(ngModel)]="newOrder.supplier_id" name="supplier_id" required />
+          </label>
+
+          <div *ngFor="let entry of productEntries; let i = index" style="margin-top: 0.5rem;">
+            <label>SKU: <input type="number" [(ngModel)]="entry.sku" name="sku{{i}}" required /></label>
+            <label>Qty: <input type="number" [(ngModel)]="entry.quantity" name="qty{{i}}" required /></label>
+            <button type="button" (click)="removeProductEntry(i)">Remove</button>
+          </div>
+
+          <button type="button" (click)="addProductEntry()">Add Product</button>
+          <br /><br />
+          <button type="submit">Submit Order</button>
+        </form>
       </div>
 
-      <button type="button" (click)="addProductEntry()">Add Product</button>
-      <br /><br />
-      <button type="submit">Submit Order</button>
-    </form>
+      <div style="margin-top: 2rem;">
+        <label>Search Order by ID:
+          <input [(ngModel)]="searchOrderId" name="searchOrderId" />
+        </label>
+        <button (click)="searchOrder()">Search</button>
+      </div>
+
+      <table *ngIf="filteredOrders.length" style="margin-top: 1rem;">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Supplier Name</th>
+            <th>Products</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders">
+            <td>{{ order.orderId }}</td>
+            <td>{{ order.supplier.name }}</td>
+            <td>
+              <div *ngFor="let product of order.productList">
+                {{ product.sku }} - {{ product.name }}
+              </div>
+            </td>
+            <td>
+              <button (click)="confirmDeleteOrder(order.orderId)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="!filteredOrders.length">No orders found.</p>
+    </ng-container>
   </div>
-
-  <!-- Search by Order ID -->
-  <div style="margin-top: 2rem;">
-    <label>
-      Search Order by ID:
-      <input [(ngModel)]="searchOrderId" name="searchOrderId" />
-    </label>
-    <button (click)="searchOrder()">Search</button>
-  </div>
-
-  <!-- Orders Table -->
-  <table style="margin-top: 1rem;" *ngIf="filteredOrders.length">
-    <thead>
-      <tr>
-        <th>Order ID</th>
-        <th>Supplier Name</th>
-        <th>Total Price</th>
-        <th>Products</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of filteredOrders">
-        <td>{{ order.orderId }}</td>
-        <td>{{ order.supplier.name }}</td>
-        <td>\${{ order.totalPrice.toFixed(2) }}</td>
-        <td>
-          <div *ngFor="let product of order.productList">
-            {{ product.sku }} - {{ product.name }}
-          </div>
-        </td>
-        <td>
-          <button (click)="deleteOrder(order.orderId)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p *ngIf="!filteredOrders.length">No orders found.</p>
-</div>
 
   <!-- Fallback -->
-  <div *ngSwitchDefault>
-    <p>Select a tab</p>
-  </div>
+  <div *ngSwitchDefault><p>Select a tab</p></div>
 </div>
