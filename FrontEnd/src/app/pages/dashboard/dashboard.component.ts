@@ -211,8 +211,17 @@ export class DashboardComponent implements OnInit {
     });
   }
   
+  confirmDeleteOrder(orderId: string): void {
+    const confirmDelete = window.confirm('Are you sure you want to delete this order?');
+    if (confirmDelete) {
+      this.deleteOrder(orderId);
+    }
+  }
+  
   deleteOrder(orderId: string) {
     this.orderService.deleteOrder(orderId).subscribe(() => this.loadOrders());
+    this.filteredOrders = this.filteredOrders.filter(order => order.orderId !== orderId);
+    alert('Order deleted successfully!');
   }
 
 }
